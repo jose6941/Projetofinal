@@ -79,17 +79,7 @@ namespace projeto4
 
             return true;
         }
-        private void btnSalvar_Click(object sender, EventArgs e)
-        {
-
-            if (ValidarFormulario())
-            {
-                Salvar();
-                materialTabControl1.SelectedIndex = 1;
-            }
-            
-        }
-
+        
         private void limpaCampos()
         {
             isAlteracao = false;
@@ -125,7 +115,7 @@ namespace projeto4
             var dt = new DataTable();
             sqlAd.Fill(dt);
             dataGridView1.DataSource = dt;
-            
+
         }
 
         private void Salvar()
@@ -136,12 +126,12 @@ namespace projeto4
             if (!isAlteracao)
             {
                 sql = "INSERT INTO aluno" + "(matricula, dt_nascimento, nome, endereco, bairro, cidade, estado, senha) VALUES (@matricula, @dt_nascimento, @nome, @endereco, @bairro, @cidade, @estado, @senha)";
-                
+
             }
             else
             {
                 sql = "UPDATE aluno SET " + "matricula = @matricula," + "dt_nascimento = @dt_nascimento," + "nome = @nome," + "endereco = @endereco," + "bairro = @bairro," + "cidade = @cidade," + "estado = @estado," + "senha = @senha" + " WHERE id = @id";
-                           
+
             }
 
             var cmd = new MySqlCommand(sql, con);
@@ -162,30 +152,7 @@ namespace projeto4
             limpaCampos();
         }
 
-        private void tabPage2_Enter(object sender, EventArgs e)
-        {
-            CarregaGrid();
-        }
-
-        private void btnExcluir_Click(object sender, EventArgs e)
-        {
-            if(dataGridView1.SelectedRows.Count > 0)//verifica se selecionou alguma linha
-            {
-                if(MessageBox.Show("Deseja realmente deletar?", "IFSP", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    var id = (int)dataGridView1.SelectedRows[0].Cells[0].Value;
-                    Deletar(id);
-                    CarregaGrid();
-                }
-
-            }
-            else
-            {
-                MessageBox.Show("Selecione algum aluno!", "IFSP", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-        private void Deletar (int id)
+        private void Deletar(int id)
         {
             var con = new MySqlConnection(cs);
             con.Open();
@@ -196,16 +163,12 @@ namespace projeto4
             cmd.ExecuteNonQuery();
         }
 
-        private void btnEditar_Click(object sender, EventArgs e)
-        {
-            Editar();
-        }
 
         private void Editar()
         {
-            if(dataGridView1.SelectedRows.Count > 0)
+            if (dataGridView1.SelectedRows.Count > 0)
             {
-                isAlteracao= true;
+                isAlteracao = true;
                 var linha = dataGridView1.SelectedRows[0];
                 txtId.Text = linha.Cells["id"].Value.ToString();
                 txtMatricula.Text = linha.Cells["matricula"].Value.ToString();
@@ -225,23 +188,64 @@ namespace projeto4
             }
         }
 
-        private void btnNovo_Click(object sender, EventArgs e)
-        {
-            limpaCampos();
-            tabPage1.Show();
-            txtMatricula.Focus();
-
-        }
-
-        private void dataGridView1_DoubleClick(object sender, EventArgs e)
-        {
-            Editar();
-        }
-
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             limpaCampos();
             txtMatricula.Focus();
+        }
+
+        private void btnSalvar_Click_1(object sender, EventArgs e)
+        {
+            if (ValidarFormulario())
+            {
+                Salvar();
+                materialTabControl1.SelectedIndex = 1;
+            }
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            Editar();
+        }
+
+        private void tabPage2_Click(object sender, EventArgs e)
+        {
+            CarregaGrid();
+        }
+
+        private void btnEditar_Click_1(object sender, EventArgs e)
+        {
+            Editar();
+        }
+
+        private void btnExcluir_Click_1(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count > 0)//verifica se selecionou alguma linha
+            {
+                if (MessageBox.Show("Deseja realmente deletar?", "IFSP", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    var id = (int)dataGridView1.SelectedRows[0].Cells[0].Value;
+                    Deletar(id);
+                    CarregaGrid();
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("Selecione algum aluno!", "IFSP", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void btnNovo_Click_1(object sender, EventArgs e)
+        {
+            limpaCampos();
+            tabPage1.Show();
+            txtMatricula.Focus();
+        }
+
+        private void tabPage2_Enter(object sender, EventArgs e)
+        {
+            CarregaGrid();
         }
     }
 }
